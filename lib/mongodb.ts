@@ -1,10 +1,8 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/tripnexa";
-
-if (!MONGODB_URI) {
-    throw new Error("Please define the MONGODB_URI environment variable inside .env.local");
-}
+const MONGODB_URI =
+    process.env.MONGODB_URI ||
+    "mongodb+srv://<db_username>:<db_password>@cluster0.5gndcdq.mongodb.net/tripnexa?retryWrites=true&w=majority&appName=Cluster0";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let cached = (global as any).mongoose;
@@ -15,6 +13,14 @@ if (!cached) {
 }
 
 async function connectToDatabase() {
+    if (
+        !MONGODB_URI ||
+        MONGODB_URI.includes("<db_username>") ||
+        MONGODB_URI.includes("<db_password>")
+    ) {
+        throw new Error("Please set a valid MONGODB_URI in environment variables");
+    }
+
     if (cached.conn) {
         return cached.conn;
     }
