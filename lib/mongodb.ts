@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const MONGODB_URI =
     process.env.MONGODB_URI ||
+    process.env.MONGODB_URL ||
     "mongodb+srv://<db_username>:<db_password>@cluster0.5gndcdq.mongodb.net/tripnexa?retryWrites=true&w=majority&appName=Cluster0";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,7 +19,7 @@ async function connectToDatabase() {
         MONGODB_URI.includes("<db_username>") ||
         MONGODB_URI.includes("<db_password>")
     ) {
-        throw new Error("Please set a valid MONGODB_URI in environment variables");
+        throw new Error("Please set a valid MONGODB_URI or MONGODB_URL in environment variables");
     }
 
     if (cached.conn) {
